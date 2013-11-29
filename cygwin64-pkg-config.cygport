@@ -1,0 +1,27 @@
+TOOLCHAIN_TARGET="x86_64-pc-cygwin"
+inherit toolchain
+
+NAME="cygwin64-pkg-config"
+VERSION=0.28
+RELEASE=1
+CATEGORY="Devel"
+SUMMARY="Package compiling configuration utility for Cygwin64 toolchain"
+DESCRIPTION="pkg-config is a script to make putting together all the build
+flags when compiling/linking a lot easier."
+HOMEPAGE="http://pkg-config.freedesktop.org/wiki/"
+SRC_URI="http://pkgconfig.freedesktop.org/releases/pkg-config-${VERSION}.tar.gz"
+SRC_DIR="pkg-config-${VERSION}"
+
+CYGCONF_ARGS="
+	--disable-host-tool
+	--enable-indirect-deps
+	--program-prefix=${TOOLCHAIN_TARGET}-
+	--with-pc-path=${TOOLCHAIN_SYSROOT}/usr/lib/pkgconfig:${TOOLCHAIN_SYSROOT}/usr/share/pkgconfig:/usr/share/pkgconfig
+	--with-system-include-path=${TOOLCHAIN_SYSROOT}/usr/include
+	--with-system-library-path=${TOOLCHAIN_SYSROOT}/usr/lib
+"
+
+src_install() {
+	cd ${B}
+	cyginstall m4dir=${TOOLCHAIN_SYSROOT}/usr/share/aclocal
+}
